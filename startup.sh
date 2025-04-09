@@ -1,6 +1,6 @@
 # Create the VM instance named "todolist" in the project "CISC 5550"
 gcloud compute instances create todolist \
-  --project="cisc-5550" \
+  --project="cisc 5550" \
   --machine-type=n1-standard-1 \
   --image-family=debian-12 \
   --image-project=debian-cloud \
@@ -9,7 +9,7 @@ gcloud compute instances create todolist \
 
 # Create a firewall rule to allow TCP traffic on port 5001
 gcloud compute firewall-rules create rule-allow-tcp-5001 \
-  --project="cisc-5550" \
+  --project="cisc 5550" \
   --source-ranges=0.0.0.0/0 \
   --target-tags=http-server \
   --allow=tcp:5001
