@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 # make sure to replace localhost with the actual IP of the backend service after you deploy the backend service on Google Cloud
 # for example, like this: TODO_API_URL = "http://123.456.789.123:5001"
-TODO_API_URL = os.getenv("TODO_API_URL", "http://localhost:5001")
+TODO_API_URL = os.getenv("TODO_API_URL", "http://34.135.80.40:5001")
 
 
 
