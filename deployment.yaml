@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todolist-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todolist-frontend
+  template:
+    metadata:
+      labels:
+        app: todolist-frontend
+    spec:
+      containers:
+      - name: todolist-frontend
+        image: alinazim363/todolist-frontend:latest
+        ports:
+        - containerPort: 5002
+        env:
+        - name: TODO_API_URL
+          value: "http://34.135.80.40:5001"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todolist-frontend-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: todolist-frontend
+  ports:
+  - protocol: TCP
+    port: 80           # External port for your application
+    targetPort: 5002   # The container port your app listens on
+
