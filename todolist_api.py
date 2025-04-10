@@ -1,4 +1,4 @@
-# RESTful API
+
 from flask import Flask, render_template, redirect, g, request, url_for, jsonify, Response
 import sqlite3
 import urllib
@@ -10,8 +10,8 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 
-@app.route("/api/items")  # default method is GET
-def get_items(): # this is the counterpart of show_list() from homework 3
+@app.route("/api/items")
+def get_items():
     db = get_db()
     cur = db.execute('SELECT what_to_do, due_date, status FROM entries')
     entries = cur.fetchall()
@@ -22,7 +22,7 @@ def get_items(): # this is the counterpart of show_list() from homework 3
 
 
 @app.route("/api/items", methods=['POST'])
-def add_item(): # this is the counterpart of add_entry() from homework 3
+def add_item():
     db = get_db()
     db.execute('insert into entries (what_to_do, due_date) values (?, ?)',
                [request.json['what_to_do'], request.json['due_date']])
@@ -33,7 +33,6 @@ def add_item(): # this is the counterpart of add_entry() from homework 3
 @app.route("/api/items/<item>", methods=['DELETE'])
 def delete_item(item):
     db = get_db()
-    # Use parameters in your SQL to avoid injection vulnerabilities
     db.execute("DELETE FROM entries WHERE what_to_do=?", [item])
     db.commit()
     return jsonify({"result": True})
@@ -42,7 +41,6 @@ def delete_item(item):
 @app.route("/api/items/<item>", methods=['PUT'])
 def update_item(item):
     db = get_db()
-    # Updating the status (use parameterized queries)
     db.execute("UPDATE entries SET status='done' WHERE what_to_do=?", [item])
     db.commit()
     return jsonify({"result": True})

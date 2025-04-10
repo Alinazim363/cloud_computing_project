@@ -31,7 +31,7 @@ spec:
     app: todolist-frontend
   ports:
   - protocol: TCP
-    port: 80           # External port for client access
-    targetPort: 5002   # Must match the container port your app listens on
+    port: 80       
+    targetPort: 5002  
 
 
