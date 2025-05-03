@@ -4,7 +4,7 @@ import requests
 import os
 
 app = Flask(__name__)
-TODO_API_URL = os.getenv("TODO_API_URL", "http://34.135.80.40:5001")
+TODO_API_URL = os.getenv("TODO_API_URL", "http://34.55.28.240:5001")
 
 
 
