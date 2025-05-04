@@ -1,7 +1,7 @@
 FROM python:3
 
 # Install Flask and requests modules
-RUN pip install flask requests
+RUN pip install flask requests googletrans==4.0.0-rc1
 
 # Expose port 5002 
 EXPOSE 5002
