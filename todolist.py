@@ -7,6 +7,7 @@ app = Flask(__name__)
 TODO_API_URL = os.getenv("TODO_API_URL", "http://34.29.150.16:5001")
 translator = Translator()
 
+
 @app.route("/")
 def show_list():
     lang = request.args.get('lang', None)
@@ -16,7 +17,9 @@ def show_list():
 
     if lang:
         for item in tdlist:
-            item['what_to_do'] = translator.translate(item['what_to_do'], dest=lang).text
+            item['what_to_do'] = translator.translate(
+                item['what_to_do'], dest=lang
+            ).text
 
     # Static UI labels for translation
     static_labels = {
@@ -41,6 +44,7 @@ def show_list():
         static_labels=static_labels
     )
 
+
 @app.route("/add", methods=['POST'])
 def add_entry():
     lang = request.form.get('lang', '')
@@ -50,19 +54,20 @@ def add_entry():
     })
     return redirect(url_for('show_list', lang=lang))
 
-@app.route("/delete/<item>")
-def delete_entry(item):
+
+@app.route("/delete/<int:item_id>")
+def delete_entry(item_id):
     lang = request.args.get('lang', '')
-    item_enc = requests.utils.requote_uri(item)
-    requests.delete(f"{TODO_API_URL}/api/items/{item_enc}")
+    requests.delete(f"{TODO_API_URL}/api/items/{item_id}")
     return redirect(url_for('show_list', lang=lang))
 
-@app.route("/mark/<item>")
-def mark_as_done(item):
+
+@app.route("/mark/<int:item_id>")
+def mark_as_done(item_id):
     lang = request.args.get('lang', '')
-    item_enc = requests.utils.requote_uri(item)
-    requests.put(f"{TODO_API_URL}/api/items/{item_enc}")
+    requests.put(f"{TODO_API_URL}/api/items/{item_id}")
     return redirect(url_for('show_list', lang=lang))
+
 
 if __name__ == "__main__":
     app.run("0.0.0.0", port=5002)

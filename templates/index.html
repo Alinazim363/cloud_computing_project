@@ -35,10 +35,10 @@
         </td>
         <td>{{ entry.due_date|safe }}</td>
         <td>
-          <button onclick="location.href='/mark/{{ entry.what_to_do|urlencode }}{% if current_lang %}?lang={{ current_lang }}{% endif %}'">
+          <button onclick="location.href='{{ url_for('mark_as_done', item_id=entry.id, lang=current_lang) }}'">
             {{ static_labels.mark_button }}
           </button>
-          <button onclick="location.href='/delete/{{ entry.what_to_do|urlencode }}{% if current_lang %}?lang={{ current_lang }}{% endif %}'">
+          <button onclick="location.href='{{ url_for('delete_entry', item_id=entry.id, lang=current_lang) }}'">
             {{ static_labels.delete_button }}
           </button>
         </td>
@@ -75,7 +75,6 @@
 
   <script>
     var show_entry_form = false;
-    // use the translated labels in the toggle
     var txtAdd    = "{{ static_labels.add_item }}";
     var txtCancel = "{{ static_labels.cancel_entry }}";
 
