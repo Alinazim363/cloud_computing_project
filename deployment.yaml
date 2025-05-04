@@ -15,6 +15,7 @@ spec:
       containers:
       - name: todolist-frontend
         image: alinazim363/todolist-frontend:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 5002
         env:
