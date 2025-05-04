@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.11-slim
 
 # Install Flask and requests modules
 RUN pip install flask requests googletrans==4.0.0-rc1
