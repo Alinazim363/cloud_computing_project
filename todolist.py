@@ -56,7 +56,7 @@ def show_list():
 @app.route('/add', methods=['POST'])
 def add_entry():
     lang = request.form.get('lang','')
-    category = request.form.get('category','miscellaneous')
+    category = request.form['category']
     requests.post(f"{TODO_API_URL}/api/items", json={
         'what_to_do': request.form['what_to_do'],
         'due_date': request.form['due_date'],
