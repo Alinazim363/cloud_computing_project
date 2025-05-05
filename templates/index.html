@@ -1,23 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Todo List Example</title>
+  <title>Todo List</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <style>
-    .done { text-decoration: line-through; }
-  </style>
+  <style>.done { text-decoration: line-through; }</style>
 </head>
 <body>
   <div class="container" style="margin-top:1em;">
-    <!-- Language selector -->
-    <form method="get" style="margin-bottom:1em;">
+    <!-- language + category filter -->
+    <form method="get" class="form-inline" style="margin-bottom:1em;">
+      {{ static_labels.filter_label }}
+      <select name="category" class="form-control" onchange="this.form.submit()">
+        <option value="" {% if not current_cat %}selected{% endif %}>All</option>
+        <option value="work"        {% if current_cat=='work' %}selected{% endif %}>Work</option>
+        <option value="school"      {% if current_cat=='school' %}selected{% endif %}>School</option>
+        <option value="personal"    {% if current_cat=='personal' %}selected{% endif %}>Personal</option>
+        <option value="miscellaneous" {% if current_cat=='miscellaneous' %}selected{% endif %}>Miscellaneous</option>
+      </select>
+
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+
       Translate to:
-      <select name="lang" onchange="this.form.submit()">
+      <select name="lang" class="form-control" onchange="this.form.submit()">
         <option value=""  {% if not current_lang %}selected{% endif %}>Original</option>
         <option value="es" {% if current_lang=='es'   %}selected{% endif %}>Spanish</option>
         <option value="fr" {% if current_lang=='fr'   %}selected{% endif %}>French</option>
@@ -27,49 +36,58 @@
     </form>
 
     <h3>{{ static_labels.heading }}</h3>
-    <table class='table'>
+    <table class="table">
+      <tr>
+        <th>Task</th><th>When</th><th>Category</th><th>Actions</th>
+      </tr>
       {% for entry in todolist %}
       <tr>
-        <td {% if entry.status=='done' %} class='done' {% endif %}>
+        <td {% if entry.status=='done' %}class="done"{% endif %}>
           {{ entry.what_to_do|safe }}
         </td>
         <td>{{ entry.due_date|safe }}</td>
+        <td>{{ entry.category|capitalize }}</td>
         <td>
-          <button onclick="location.href='{{ url_for('mark_as_done', item_id=entry.id, lang=current_lang) }}'">
+          <a class="btn btn-xs btn-default" href="{{ url_for('mark_as_done', item_id=entry.id, lang=current_lang, category=current_cat) }}">
             {{ static_labels.mark_button }}
-          </button>
-          <button onclick="location.href='{{ url_for('delete_entry', item_id=entry.id, lang=current_lang) }}'">
+          </a>
+          <a class="btn btn-xs btn-danger" href="{{ url_for('delete_entry', item_id=entry.id, lang=current_lang, category=current_cat) }}">
             {{ static_labels.delete_button }}
-          </button>
+          </a>
         </td>
       </tr>
       {% else %}
-      <tr>
-        <td><em>{{ static_labels.empty_message }}</em></td>
-      </tr>
+      <tr><td colspan="4"><em>{{ static_labels.empty_message }}</em></td></tr>
       {% endfor %}
     </table>
-    <button onclick="toggle_entry_form();" id='toggle_button'>
+
+    <button onclick="toggle_entry_form();" id="toggle_button" class="btn btn-primary">
       {{ static_labels.add_item }}
     </button>
   </div>
 
   <div class="container">
-    <form action="/add" method="POST" id="add-form" style="display:none">
+    <form action="/add" method="POST" id="add-form" style="display:none; margin-top:1em;">
       <input type="hidden" name="lang" value="{{ current_lang }}">
-      <div class="row">
-        <div class="col-sm-6">
-          {{ static_labels.what_label }}
-          <input type="text" size="50" name="what_to_do" value="more homework?" />
-        </div>
-        <div class="col-sm-3">
-          {{ static_labels.when_label }}
-          <input type="text" name="due_date" value="" />
-        </div>
-        <div class="col-sm-3">
-          <input type="submit" value="{{ static_labels.save_button }}" />
-        </div>
+      <input type="hidden" name="category" value="{{ current_cat }}">
+      <div class="form-group">
+        <label>{{ static_labels.what_label }}</label>
+        <input type="text" class="form-control" name="what_to_do" required>
       </div>
+      <div class="form-group">
+        <label>{{ static_labels.when_label }}</label>
+        <input type="text" class="form-control" name="due_date">
+      </div>
+      <div class="form-group">
+        <label>{{ static_labels.category_label }}</label>
+        <select name="category" class="form-control">
+          <option value="work">Work</option>
+          <option value="school">School</option>
+          <option value="personal">Personal</option>
+          <option value="miscellaneous" selected>Miscellaneous</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-success">{{ static_labels.save_button }}</button>
     </form>
   </div>
 
@@ -77,17 +95,16 @@
     var show_entry_form = false;
     var txtAdd    = "{{ static_labels.add_item }}";
     var txtCancel = "{{ static_labels.cancel_entry }}";
-
     function toggle_entry_form() {
       if (show_entry_form) {
-        $('#add-form').hide();
-        $('#toggle_button').text(txtAdd);
+        document.getElementById('add-form').style.display = 'none';
+        document.getElementById('toggle_button').innerText = txtAdd;
       } else {
-        $('#add-form').show();
-        $('#toggle_button').text(txtCancel);
+        document.getElementById('add-form').style.display = 'block';
+        document.getElementById('toggle_button').innerText = txtCancel;
       }
       show_entry_form = !show_entry_form;
-    };
+    }
   </script>
 </body>
 </html>

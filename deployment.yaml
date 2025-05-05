@@ -14,13 +14,13 @@ spec:
     spec:
       containers:
       - name: todolist-frontend
-        image: alinazim363/todolist-frontend:v5
+        image: alinazim363/todolist-frontend:v6
         imagePullPolicy: Always
         ports:
         - containerPort: 5002
         env:
         - name: TODO_API_URL
-          value: "http://34.29.150.16:5001"
+          value: "http://34.28.88.161:5001"
 ---
 apiVersion: v1
 kind: Service
