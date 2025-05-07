@@ -4,7 +4,7 @@ import os
 from googletrans import Translator
 
 app = Flask(__name__)
-TODO_API_URL = os.getenv('TODO_API_URL', 'http://34.28.88.161:5001')
+TODO_API_URL = os.getenv('TODO_API_URL', 'http://34.44.198.35:5001')
 translator = Translator()
 
 
